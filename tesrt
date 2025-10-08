@@ -9292,7 +9292,7 @@ function TabFunction:newmaketabtop(TabConfig)
 	
 	MakeShineOnHover(TopButton, TopButton.Title)
 	
-	 topTabInfo = {
+	local topTabInfo = {
 		Button = TopButton,
 		Name = TabConfig.Name,
 		SideTabs = {},
@@ -9346,8 +9346,8 @@ function TabFunction:newmaketabtop(TabConfig)
 	else
 		return nil
 	end
-
-function TabFunction:MakeTab(TabConfig) 
+end
+ function TabFunction:MakeTab(TabConfig) 
 	TabConfig = TabConfig or {}
 	TabConfig.Name = TabConfig.Name or "Tab"
 	TabConfig.Icon = TabConfig.Icon or ""
@@ -9355,7 +9355,7 @@ function TabFunction:MakeTab(TabConfig)
 	TabConfig.FeedbackWebhook = TabConfig.FeedbackWebhook or nil
 	TabConfig.Cooldown = TabConfig.Cooldown or 300
 
-	 parentTopTab = currentTopTabForCreation
+	local parentTopTab = currentTopTabForCreation
 	if not parentTopTab then
 		if not legacyTabGroup then
 			TabFunction:newmaketabtop({ Name = "Main", MultiTab = true, Effects = true, flames = true })
@@ -9445,7 +9445,7 @@ function TabFunction:MakeTab(TabConfig)
 				return text
 			end
 		end
-		
+
 		setTextAsync_878 = function(uiObject, text)
 			if not uiObject or not text then return end
 			uiObject.Text = text
@@ -10372,9 +10372,9 @@ function TabFunction:MakeTab(TabConfig)
 			local p=friendData.presence; local g="<font color='#d7d7e1'>"; local inGameStr, inStudioStr, onlineStr, offlineStr = translate_878("IN GAME", userLang_878), translate_878("IN STUDIO", userLang_878), translate_878("ONLINE", userLang_878), translate_878("OFFLINE", userLang_878); if p then if p.userPresenceType==2 then statusDot.BackgroundColor3=Color3.fromRGB(255,70,70); statusL.Text=string.format("<b>%s</b>\n%s%s",inGameStr,g,p.lastLocation) elseif p.userPresenceType==3 then statusDot.BackgroundColor3=Color3.fromRGB(255,165,0); statusL.Text=string.format("<b>%s</b>\n%s%s",inStudioStr,g,p.lastLocation) elseif p.userPresenceType==1 then statusDot.BackgroundColor3=Color3.fromRGB(70,255,70); statusL.Text=string.format("<b>%s</b>\n%s%s",onlineStr,g,translate_878("On Website", userLang_878)) else statusDot.BackgroundColor3=Color3.fromRGB(120,120,120); statusL.Text=string.format("<b>%s</b>",offlineStr) end else statusDot.BackgroundColor3=Color3.fromRGB(120,120,120); statusL.Text=string.format("<b>%s</b>",offlineStr) end
 		end
 		local function updatePaginationButtons() prevButton.AutoButtonColor=currentPage>1; prevButton.TextColor3=currentPage>1 and Color3.new(1,1,1)or Color3.fromRGB(120,120,120); nextButton.AutoButtonColor=currentPage*friendsPerPage<#allFriendsData; nextButton.TextColor3=currentPage*friendsPerPage<#allFriendsData and Color3.new(1,1,1)or Color3.fromRGB(120,120,120)end
-		local function displayFriendsPage() for _,v in ipairs(friendsListContainer:GetChildren())do if v:IsA("Frame")then v:Destroy()end end; local s,e=(currentPage-1)*friendsPerPage+1,math.min(currentPage*friendsPerPage,#allFriendsData); if #allFriendsData>0 then for i=s,e do createFriendCard(allFriendsData[i])end else local nF=Instance.new("TextLabel",friendsListContainer); nF.Size=UDim2.new(1,0,0,50); setTextAsync_878(nF, "No friends found to display."); nF.Font=Enum.Font.Gotham; nF.TextColor3=Color3.fromRGB(150,150,150); nF.BackgroundTransparency=1 end end; friendsListContainer.CanvasSize=UDim2.new(0,0,0,friendsListLayout.AbsoluteContentSize.Y+20); updatePaginationButtons()end
+		local function displayFriendsPage() for _,v in ipairs(friendsListContainer:GetChildren())do if v:IsA("Frame")then v:Destroy()end end; local s,e=(currentPage-1)*friendsPerPage+1,math.min(currentPage*friendsPerPage,#allFriendsData); if #allFriendsData>0 then for i=s,e do createFriendCard(allFriendsData[i])end else local nF=Instance.new("TextLabel",friendsListContainer); nF.Size=UDim2.new(1,0,0,50); setTextAsync_878(nF, "No friends found to display."); nF.Font=Enum.Font.Gotham; nF.TextColor3=Color3.fromRGB(150,150,150); nF.BackgroundTransparency=1 end; friendsListContainer.CanvasSize=UDim2.new(0,0,0,friendsListLayout.AbsoluteContentSize.Y+20); updatePaginationButtons()end
 		nextButton.Activated:Connect(function()if nextButton.AutoButtonColor then currentPage=currentPage+1;displayFriendsPage()end end); prevButton.Activated:Connect(function()if prevButton.AutoButtonColor then currentPage=currentPage-1;displayFriendsPage()end end)
-		task.spawn(function() local f,p="https://friends.roblox.com/v1/users/"..localPlayer_878.UserId.."/friends","https://presence.roblox.com/v1/users/presences"; local s,r=pcall(function()return HttpService:JSONDecode(game:HttpGet(f,true))end); if s and r and r.data then allFriendsData=r.data; local u={}; for _,fr in ipairs(allFriendsData)do table.insert(u,fr.id)end; if #u>0 then local ps,pr=pcall(function()return HttpService:JSONDecode(HttpService:PostAsync(p,HttpService:JSONEncode({userIds=u}),Enum.HttpContentType.ApplicationJson,true))end); if ps and pr and pr.userPresences then local pm={}; for _, _,pd in ipairs(pr.userPresences)do pm[pd.userId]=pd end; for _,fr in ipairs(allFriendsData)do fr.presence=pm[fr.id]end end end end; displayFriendsPage()end)
+		task.spawn(function() local f,p="https://friends.roblox.com/v1/users/"..localPlayer_878.UserId.."/friends","https://presence.roblox.com/v1/users/presences"; local s,r=pcall(function()return HttpService:JSONDecode(game:HttpGet(f,true))end); if s and r and r.data then allFriendsData=r.data; local u={}; for _,fr in ipairs(allFriendsData)do table.insert(u,fr.id)end; if #u>0 then local ps,pr=pcall(function()return HttpService:JSONDecode(HttpService:PostAsync(p,HttpService:JSONEncode({userIds=u}),Enum.HttpContentType.ApplicationJson,true))end); if ps and pr and pr.userPresences then local pm={}; for _,pd in ipairs(pr.userPresences)do pm[pd.userId]=pd end; for _,fr in ipairs(allFriendsData)do fr.presence=pm[fr.id]end end end end; displayFriendsPage()end)
 		
 		aiBubble_878 = Instance.new("Frame")
 		aiBubble_878.Size = UDim2.new(0, 280, 0, 320)
@@ -10778,7 +10778,7 @@ function TabFunction:MakeTab(TabConfig)
 You are a dual-mode AI assistant inside a Roblox game. You must first determine the user's intent.
 
 1.  **COMMAND INTENT**: If the user's request is a command to be executed (e.g., "fly", "speed 100", "spin me", "kill me", "bring player X"), generate ONLY the necessary and complete Roblox Lua script to perform that action.
-    - The script MUST be enclosed in a Lua markdown block (```lua:disable-run
+    - The script MUST be enclosed in a Lua markdown block (```lua ... ```).
     - Do NOT add any other text, explanation, or conversation outside the code block.
     - Ensure the script is functional and self-contained. For temporary effects like "spin", make the script automatically stop after a few seconds.
 
@@ -10920,7 +10920,6 @@ Analyze the prompt and choose one of the two modes.
 	end
 	return Elements
 end
-
 	function TabFunction:AddScriptHub(HubConfig)
 		HubConfig = HubConfig or {}
 		HubConfig.Name = HubConfig.Name or "Script Hub"
