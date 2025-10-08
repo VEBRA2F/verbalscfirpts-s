@@ -4144,16 +4144,19 @@ end
 
     local HapticService = game:GetService("HapticService")
     if WindowConfig.Vibrate.Enabled then
-        if HapticService:IsVibrationSupported(Enum.UserInputType.Gamepad1) then
-            HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 1)
-            task.wait(WindowConfig.Vibrate.Duration)
-            HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 0)
-        elseif HapticService:IsVibrationSupported(Enum.UserInputType.Touch) then
-            HapticService:SetMotor(Enum.UserInputType.Touch, Enum.VibrationMotor.Large, 1)
-            task.wait(WindowConfig.Vibrate.Duration)
-            HapticService:SetMotor(Enum.UserInputType.Touch, Enum.VibrationMotor.Large, 0)
-        end
+        spawn(function()
+            if HapticService:IsVibrationSupported(Enum.UserInputType.Gamepad1) then
+                HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 1)
+                task.wait(WindowConfig.Vibrate.Duration)
+                HapticService:SetMotor(Enum.UserInputType.Gamepad1, Enum.VibrationMotor.Large, 0)
+            elseif HapticService:IsVibrationSupported(Enum.UserInputType.Touch) then
+                HapticService:SetMotor(Enum.UserInputType.Touch, Enum.VibrationMotor.Large, 1)
+                task.wait(WindowConfig.Vibrate.Duration)
+                HapticService:SetMotor(Enum.UserInputType.Touch, Enum.VibrationMotor.Large, 0)
+            end
+        end)
     end
+
 
 local HttpService = game:GetService("HttpService")
 
@@ -9270,19 +9273,25 @@ function TabFunction:newmaketabtop(TabConfig)
 	TabConfig = TabConfig or {}
 	TabConfig.Name = TabConfig.Name or "Top Tab"
 	local isMultiTab = TabConfig.MultiTab or false
+	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
 		Size = UDim2.new(0, 0, 1, -4),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Parent = TopTabHolder,
 		BackgroundTransparency = 1,
 	}), {
-		AddThemeObject(MakeElement("Stroke"),"Stroke"), MakeElement("Corner", 0, 5),
+		AddThemeObject(MakeElement("Stroke"),"Stroke"),
+		MakeElement("Corner", 0, 5),
 		Create("UIPadding", {PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8)}),
 		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, 14), {
-			Size = UDim2.new(1, 0, 1, 0), Font = Enum.Font.GothamSemibold, Name = "Title"
+			Size = UDim2.new(1, 0, 1, 0),
+			Font = Enum.Font.GothamSemibold,
+			Name = "Title"
 		}), "TextDark")
 	}), "Second")
+	
 	MakeShineOnHover(TopButton, TopButton.Title)
+	
 	local topTabInfo = {
 		Button = TopButton,
 		Name = TabConfig.Name,
@@ -9291,11 +9300,17 @@ function TabFunction:newmaketabtop(TabConfig)
 		Container = nil,
 		Config = TabConfig
 	}
+	
 	if not isMultiTab then
 		topTabInfo.Container = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", nil, 5), {
-			Size = UDim2.new(1, -150, 1, -85), Position = UDim2.new(0, 150, 0, 85), Parent = MainWindow, Visible = false, Name = "ItemContainer_Direct"
+			Size = UDim2.new(1, -150, 1, -85),
+			Position = UDim2.new(0, 150, 0, 85),
+			Parent = MainWindow,
+			Visible = false,
+			Name = "ItemContainer_Direct"
 		}), {
-			MakeElement("List", 0, 6), MakeElement("Padding", 15, 10, 10, 15)
+			MakeElement("List", 0, 6),
+			MakeElement("Padding", 15, 10, 10, 15)
 		}), "Divider")
 		
 		AddConnection(topTabInfo.Container.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
@@ -9311,26 +9326,45 @@ function TabFunction:newmaketabtop(TabConfig)
 			end
 		end)
 	end
+	
 	table.insert(AllTopTabObjects, topTabInfo)
 	currentTopTabForCreation = topTabInfo
+	
 	local pressPosition
+	local pressTime
+	
 	AddConnection(TopButton.InputBegan, function(input)
-	  if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-	    pressPosition = input.Position
-	  end
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			pressPosition = input.Position
+			pressTime = tick()
+		end
 	end)
+	
 	AddConnection(TopButton.InputEnded, function(input)
-	  if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-	    if pressPosition and (input.Position - pressPosition).Magnitude < 5 then
-	      SelectTopTab(topTabInfo)
-	    end
-	    pressPosition = nil
-	  end
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			if pressPosition and pressTime then
+				local timeDiff = tick() - pressTime
+				local positionDiff = (input.Position - pressPosition).Magnitude
+				if positionDiff < 10 and timeDiff < 0.5 then
+					SelectTopTab(topTabInfo)
+				end
+			end
+			pressPosition = nil
+			pressTime = nil
+		end
 	end)
+	
+	AddConnection(TopButton.Activated, function()
+		SelectTopTab(topTabInfo)
+	end)
+	
 	if not activeTopTabObject then
-		if legacyTabGroup then table.insert(AllTopTabObjects, 1, legacyTabGroup) end
+		if legacyTabGroup then
+			table.insert(AllTopTabObjects, 1, legacyTabGroup)
+		end
 		SelectTopTab(AllTopTabObjects[1])
 	end
+	
 	if not isMultiTab then
 		return GetElements(topTabInfo.Container)
 	else
