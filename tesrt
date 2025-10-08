@@ -9278,12 +9278,16 @@ function TabFunction:newmaketabtop(TabConfig)
 	
 	if isMobile and TopTabHolder and TopTabHolder:FindFirstChildOfClass("UIListLayout") then
 		local layout = TopTabHolder:FindFirstChildOfClass("UIListLayout")
-		layout.Padding = UDim.new(0, 8)
+		layout.Padding = UDim.new(0, 4)
+		layout.FillDirection = Enum.FillDirection.Horizontal
+		layout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+		layout.VerticalAlignment = Enum.VerticalAlignment.Center
+		layout.SortOrder = Enum.SortOrder.LayoutOrder
 	end
 	
-	local minButtonWidth = isMobile and 85 or 75
-	local paddingX = isMobile and 12 or 8
-	local paddingY = isMobile and 4 or 0
+	local minButtonWidth = isMobile and 70 or 0
+	local paddingX = isMobile and 10 or 8
+	local paddingY = isMobile and 2 or 0
 	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
 		Size = UDim2.new(0, minButtonWidth, 1, -4),
@@ -9305,10 +9309,15 @@ function TabFunction:newmaketabtop(TabConfig)
 			Size = UDim2.new(1, 0, 1, 0),
 			Font = Enum.Font.GothamSemibold,
 			Name = "Title",
-			TextWrapped = false,
-			TextScaled = false
+			TextXAlignment = Enum.TextXAlignment.Center,
+			TextYAlignment = Enum.TextYAlignment.Center
 		}), "TextDark")
 	}), "Second")
+	
+	task.wait()
+	if TopButton and TopButton.Parent then
+		TopButton.Size = UDim2.new(0, math.max(minButtonWidth, TopButton.AbsoluteSize.X), 1, -4)
+	end
 	
 	MakeShineOnHover(TopButton, TopButton.Title)
 	
