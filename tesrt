@@ -9282,6 +9282,8 @@ function TabFunction:newmaketabtop(TabConfig)
 		AutomaticSize = Enum.AutomaticSize.X,
 		Parent = TopTabHolder,
 		BackgroundTransparency = 1,
+		ZIndex = 10,
+		Active = true,
 	}), {
 		AddThemeObject(MakeElement("Stroke"),"Stroke"),
 		MakeElement("Corner", 0, 5),
@@ -9319,7 +9321,9 @@ function TabFunction:newmaketabtop(TabConfig)
 			Parent = MainWindow,
 			Visible = false,
 			Name = "ItemContainer_Direct",
-			ScrollBarThickness = isMobile and 8 or 6
+			ScrollBarThickness = isMobile and 8 or 6,
+			ZIndex = 1,
+			Active = false,
 		}), {
 			MakeElement("List", 0, 6),
 			MakeElement("Padding", isMobile and 10 or 15, 10, 10, isMobile and 10 or 15)
@@ -9342,7 +9346,11 @@ function TabFunction:newmaketabtop(TabConfig)
 	table.insert(AllTopTabObjects, topTabInfo)
 	currentTopTabForCreation = topTabInfo
 	
-	AddConnection(TopButton.Activated, function()
+	AddConnection(TopButton.MouseButton1Click, function()
+		SelectTopTab(topTabInfo)
+	end)
+	
+	AddConnection(TopButton.TouchTap, function()
 		SelectTopTab(topTabInfo)
 	end)
 	
