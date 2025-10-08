@@ -9275,11 +9275,11 @@ function TabFunction:newmaketabtop(TabConfig)
 	local isMultiTab = TabConfig.MultiTab or false
 	
 	local isMobile = game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled
-	local minButtonSize = isMobile and 60 or 0
+	local minButtonSize = isMobile and 50 or 0
 	
 	if isMobile and TopTabHolder and TopTabHolder:FindFirstChildOfClass("UIListLayout") then
 		local layout = TopTabHolder:FindFirstChildOfClass("UIListLayout")
-		layout.Padding = UDim.new(0, 4)
+		layout.Padding = UDim.new(0, 2)
 	end
 	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
@@ -9293,8 +9293,8 @@ function TabFunction:newmaketabtop(TabConfig)
 		AddThemeObject(MakeElement("Stroke"),"Stroke"),
 		MakeElement("Corner", 0, 5),
 		Create("UIPadding", {
-			PaddingLeft = UDim.new(0, isMobile and 10 or 8),
-			PaddingRight = UDim.new(0, isMobile and 10 or 8),
+			PaddingLeft = UDim.new(0, isMobile and 8 or 8),
+			PaddingRight = UDim.new(0, isMobile and 8 or 8),
 			PaddingTop = UDim.new(0, isMobile and 2 or 0),
 			PaddingBottom = UDim.new(0, isMobile and 2 or 0)
 		}),
