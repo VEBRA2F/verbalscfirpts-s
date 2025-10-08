@@ -9275,15 +9275,18 @@ function TabFunction:newmaketabtop(TabConfig)
 	local isMultiTab = TabConfig.MultiTab or false
 	
 	local isMobile = game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled
-	local minButtonSize = isMobile and 60 or 0
 	
 	if isMobile and TopTabHolder and TopTabHolder:FindFirstChildOfClass("UIListLayout") then
 		local layout = TopTabHolder:FindFirstChildOfClass("UIListLayout")
-		layout.Padding = UDim.new(0, 4)
+		layout.Padding = UDim.new(0, 8)
 	end
 	
+	local minButtonWidth = isMobile and 85 or 75
+	local paddingX = isMobile and 12 or 8
+	local paddingY = isMobile and 4 or 0
+	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
-		Size = UDim2.new(0, minButtonSize, 1, -4),
+		Size = UDim2.new(0, minButtonWidth, 1, -4),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Parent = TopTabHolder,
 		BackgroundTransparency = 1,
@@ -9293,15 +9296,17 @@ function TabFunction:newmaketabtop(TabConfig)
 		AddThemeObject(MakeElement("Stroke"),"Stroke"),
 		MakeElement("Corner", 0, 5),
 		Create("UIPadding", {
-			PaddingLeft = UDim.new(0, isMobile and 10 or 8),
-			PaddingRight = UDim.new(0, isMobile and 10 or 8),
-			PaddingTop = UDim.new(0, isMobile and 2 or 0),
-			PaddingBottom = UDim.new(0, isMobile and 2 or 0)
+			PaddingLeft = UDim.new(0, paddingX),
+			PaddingRight = UDim.new(0, paddingX),
+			PaddingTop = UDim.new(0, paddingY),
+			PaddingBottom = UDim.new(0, paddingY)
 		}),
 		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, 14), {
 			Size = UDim2.new(1, 0, 1, 0),
 			Font = Enum.Font.GothamSemibold,
-			Name = "Title"
+			Name = "Title",
+			TextWrapped = false,
+			TextScaled = false
 		}), "TextDark")
 	}), "Second")
 	
