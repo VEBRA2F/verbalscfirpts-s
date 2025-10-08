@@ -9275,15 +9275,15 @@ function TabFunction:newmaketabtop(TabConfig)
 	local isMultiTab = TabConfig.MultiTab or false
 	
 	local isMobile = game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled
-	local minButtonSize = isMobile and 70 or 0
+	local minButtonSize = isMobile and 60 or 0
 	
 	if isMobile and TopTabHolder and TopTabHolder:FindFirstChildOfClass("UIListLayout") then
 		local layout = TopTabHolder:FindFirstChildOfClass("UIListLayout")
-		layout.Padding = UDim.new(0, 2)
+		layout.Padding = UDim.new(0, 4)
 	end
 	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
-		Size = isMobile and UDim2.new(0, 0, 1, -4) or UDim2.new(0, 0, 1, -4),
+		Size = UDim2.new(0, minButtonSize, 1, -4),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Parent = TopTabHolder,
 		BackgroundTransparency = 1,
@@ -9293,10 +9293,10 @@ function TabFunction:newmaketabtop(TabConfig)
 		AddThemeObject(MakeElement("Stroke"),"Stroke"),
 		MakeElement("Corner", 0, 5),
 		Create("UIPadding", {
-			PaddingLeft = UDim.new(0, isMobile and 12 or 8),
-			PaddingRight = UDim.new(0, isMobile and 12 or 8),
-			PaddingTop = UDim.new(0, 0),
-			PaddingBottom = UDim.new(0, 0)
+			PaddingLeft = UDim.new(0, isMobile and 10 or 8),
+			PaddingRight = UDim.new(0, isMobile and 10 or 8),
+			PaddingTop = UDim.new(0, isMobile and 2 or 0),
+			PaddingBottom = UDim.new(0, isMobile and 2 or 0)
 		}),
 		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, 14), {
 			Size = UDim2.new(1, 0, 1, 0),
@@ -9304,15 +9304,6 @@ function TabFunction:newmaketabtop(TabConfig)
 			Name = "Title"
 		}), "TextDark")
 	}), "Second")
-	
-	local hitboxExpand = isMobile and Create("Frame", {
-		Size = UDim2.new(1, 8, 1, 8),
-		Position = UDim2.new(0.5, 0, 0.5, 0),
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		BackgroundTransparency = 1,
-		ZIndex = 9,
-		Parent = TopButton
-	}) or nil
 	
 	MakeShineOnHover(TopButton, TopButton.Title)
 	
@@ -9364,29 +9355,12 @@ function TabFunction:newmaketabtop(TabConfig)
 	currentTopTabForCreation = topTabInfo
 	
 	AddConnection(TopButton.MouseButton1Click, function()
-		task.wait(0.05)
 		SelectTopTab(topTabInfo)
 	end)
 	
 	AddConnection(TopButton.TouchTap, function()
-		task.wait(0.05)
 		SelectTopTab(topTabInfo)
 	end)
-	
-	if isMobile and hitboxExpand then
-		local hitButton = Create("TextButton", {
-			Size = UDim2.new(1, 0, 1, 0),
-			BackgroundTransparency = 1,
-			Text = "",
-			ZIndex = 11,
-			Parent = hitboxExpand
-		})
-		
-		AddConnection(hitButton.Activated, function()
-			task.wait(0.05)
-			SelectTopTab(topTabInfo)
-		end)
-	end
 	
 	if not activeTopTabObject then
 		if legacyTabGroup then
