@@ -9275,7 +9275,7 @@ function TabFunction:newmaketabtop(TabConfig)
 	local isMultiTab = TabConfig.MultiTab or false
 	
 	local isMobile = game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled
-	local minButtonSize = isMobile and 80 or 0
+	local minButtonSize = isMobile and 60 or 0
 	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
 		Size = UDim2.new(0, minButtonSize, 1, -4),
