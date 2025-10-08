@@ -9288,12 +9288,12 @@ function TabFunction:newmaketabtop(TabConfig)
 		AddThemeObject(MakeElement("Stroke"),"Stroke"),
 		MakeElement("Corner", 0, 5),
 		Create("UIPadding", {
-			PaddingLeft = UDim.new(0, isMobile and 12 or 8),
-			PaddingRight = UDim.new(0, isMobile and 12 or 8),
-			PaddingTop = UDim.new(0, isMobile and 4 or 0),
-			PaddingBottom = UDim.new(0, isMobile and 4 or 0)
+			PaddingLeft = UDim.new(0, isMobile and 10 or 8),
+			PaddingRight = UDim.new(0, isMobile and 10 or 8),
+			PaddingTop = UDim.new(0, isMobile and 2 or 0),
+			PaddingBottom = UDim.new(0, isMobile and 2 or 0)
 		}),
-		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, isMobile and 15 or 14), {
+		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, 14), {
 			Size = UDim2.new(1, 0, 1, 0),
 			Font = Enum.Font.GothamSemibold,
 			Name = "Title"
@@ -9321,9 +9321,12 @@ function TabFunction:newmaketabtop(TabConfig)
 			Parent = MainWindow,
 			Visible = false,
 			Name = "ItemContainer_Direct",
-			ScrollBarThickness = isMobile and 8 or 6,
+			ScrollBarThickness = isMobile and 10 or 6,
 			ZIndex = 1,
 			Active = false,
+			ScrollingDirection = Enum.ScrollingDirection.Y,
+			ElasticBehavior = Enum.ElasticBehavior.WhenScrollable,
+			ScrollBarImageTransparency = isMobile and 0.3 or 0.5,
 		}), {
 			MakeElement("List", 0, 6),
 			MakeElement("Padding", isMobile and 10 or 15, 10, 10, isMobile and 10 or 15)
