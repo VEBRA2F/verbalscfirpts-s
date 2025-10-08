@@ -9330,30 +9330,6 @@ function TabFunction:newmaketabtop(TabConfig)
 	table.insert(AllTopTabObjects, topTabInfo)
 	currentTopTabForCreation = topTabInfo
 	
-	local pressPosition
-	local pressTime
-	
-	AddConnection(TopButton.InputBegan, function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			pressPosition = input.Position
-			pressTime = tick()
-		end
-	end)
-	
-	AddConnection(TopButton.InputEnded, function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			if pressPosition and pressTime then
-				local timeDiff = tick() - pressTime
-				local positionDiff = (input.Position - pressPosition).Magnitude
-				if positionDiff < 10 and timeDiff < 0.5 then
-					SelectTopTab(topTabInfo)
-				end
-			end
-			pressPosition = nil
-			pressTime = nil
-		end
-	end)
-	
 	AddConnection(TopButton.Activated, function()
 		SelectTopTab(topTabInfo)
 	end)
