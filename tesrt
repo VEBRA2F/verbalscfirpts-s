@@ -9278,18 +9278,18 @@ function TabFunction:newmaketabtop(TabConfig)
 	
 	if isMobile and TopTabHolder and TopTabHolder:FindFirstChildOfClass("UIListLayout") then
 		local layout = TopTabHolder:FindFirstChildOfClass("UIListLayout")
-		layout.Padding = UDim.new(0, 5)
+		layout.Padding = UDim.new(0, 8)
 		layout.FillDirection = Enum.FillDirection.Horizontal
 		layout.HorizontalAlignment = Enum.HorizontalAlignment.Left
 		layout.VerticalAlignment = Enum.VerticalAlignment.Center
 		layout.SortOrder = Enum.SortOrder.LayoutOrder
 	end
 	
-	local paddingX = isMobile and 8 or 8
-	local paddingY = isMobile and 5 or 0
+	local paddingX = isMobile and 12 or 8
+	local paddingY = isMobile and 6 or 0
 	
 	local TopButton = AddThemeObject(SetChildren(SetProps(MakeElement("Button"), {
-		Size = UDim2.new(0, 0, 1, -8),
+		Size = UDim2.new(0, 0, 1, -6),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Parent = TopTabHolder,
 		BackgroundTransparency = 1,
@@ -9304,14 +9304,15 @@ function TabFunction:newmaketabtop(TabConfig)
 			PaddingTop = UDim.new(0, paddingY),
 			PaddingBottom = UDim.new(0, paddingY)
 		}),
-		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, isMobile and 10 or 14), {
+		AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, isMobile and 11 or 14), {
 			Size = UDim2.new(0, 0, 1, 0),
 			AutomaticSize = Enum.AutomaticSize.X,
 			Font = Enum.Font.GothamSemibold,
 			Name = "Title",
 			TextXAlignment = Enum.TextXAlignment.Center,
 			TextYAlignment = Enum.TextYAlignment.Center,
-			TextTruncate = Enum.TextTruncate.None
+			TextTruncate = Enum.TextTruncate.None,
+			TextWrapped = false
 		}), "TextDark")
 	}), "Second")
 	
